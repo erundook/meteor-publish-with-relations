@@ -14,9 +14,48 @@ $ mrt add publish-with-relations
 
 ## API
 
-### Basics
+### How to use it
+Let's say you want to render a page that requires data from three collections: Posts, Comments, and Users.
 
 ```javascript
+// Post JSON
+"post" : {
+  "_id" : [objectId],
+  "authorId" : [objectId]
+}
+```
+
+```javascript
+// Comment JSON
+"comment" : {
+  "_id" : [objectId],
+  "userId" : [objectId],
+  "postId" : [postId],
+  "approved" : [Boolean]
+}
+```
+
+```javascript
+// User JSON
+"user" : {
+  "_id" : [objectId]
+}
+```
+
+The publish-with-relations package will allow you to publish all three under a single publication/subscription. 
+
+For example, the publication below will return the post (specified by the id parameter), along with the user profile of the auther and 10 approved comments with their author profiles as well.
+
+```javascript
+// On the client
+if( Meteor.isClient() ){
+  Meteor.subscribe('post', postId);
+}
+```
+
+```javascript
+// On the server
+if(Meteor.isServer()){
   Meteor.publish('post', function(id) {
     Meteor.publishWithRelations({
       handle: this,
@@ -41,18 +80,25 @@ $ mrt add publish-with-relations
       }]
     });
   });
+}
 ```
+What you'll notice is that you can actually nest mappings/relationships within one another. So for example, a post has many comments, and each comment has an author. 
 
-This will publish the post specified by id parameter together
-with user profile of its author and a list of ten approved comments
-with their author profiles as well.
+### Properties of Meteor.publishWithRelations
+```collection``` (Collection) 
+Add the name of the collection
 
-With one call we publish a post to the ```Posts``` collection, post
-comments to the ```Comments``` collection and corresponding authors to
-the ```Meteor.users``` collection so we have all the data we need to
-display a post.
+```key``` (String)
+This is the foreign key that relates two collections. For example, a Post has a User through ```authorId```, so the key would be ```authorId```.
 
-You can check another (more complex) example at this [gist](https://gist.github.com/erundook/5012259).
+```reverse``` (Boolean, [false])
+Reverse tells the relationship of the key between the collections. Reverse should be set to true if the foreign key is a property of the mapped Collection. For example, ```postId``` is a property of Comments, which is mapped to Posts. Therefore, reverse should be true.
+
+```filter``` (Object)
+The selectors for a Meteor mongo query
+
+```options``` (Object)
+Options on the Meteor mongo query
 
 ### Changelog
 #### v0.1.4
