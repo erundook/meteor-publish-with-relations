@@ -17,15 +17,16 @@ $ mrt add publish-with-relations
 ### How to use it
 Let's say you want to render a page that requires data from three collections: Posts, Comments, and Users.
 
-Post JSON
 ```javascript
+// Post JSON
 "post" : {
   "_id" : [objectId],
   "authorId" : [objectId]
 }
 ```
-Comment JSON
+
 ```javascript
+// Comment JSON
 "comment" : {
   "_id" : [objectId],
   "userId" : [objectId],
@@ -33,8 +34,9 @@ Comment JSON
   "approved" : [Boolean]
 }
 ```
-User JSON
+
 ```javascript
+// User JSON
 "user" : {
   "_id" : [objectId]
 }
@@ -44,14 +46,15 @@ The publish-with-relations package will allow you to publish all three under a s
 
 For example, the publication below will return the post (specified by the id parameter), along with the user profile of the auther and 10 approved comments with their author profiles as well.
 
-On the client
 ```javascript
+// On the client
 if( Meteor.isClient() ){
   Meteor.subscribe('post', postId);
 }
 ```
-On the server
+
 ```javascript
+// On the server
 if(Meteor.isServer()){
   Meteor.publish('post', function(id) {
     Meteor.publishWithRelations({
