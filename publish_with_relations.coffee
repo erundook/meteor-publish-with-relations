@@ -47,7 +47,8 @@ Meteor.publishWithRelations = (params) ->
       doMapping(id, fields, params.mappings)
     changed: (id, fields) ->
       _.each fields, (value, key) ->
-        changedMappings = _.where(params.mappings, {key: key, reverse: false})
+        changedMappings = _.filter params.mappings, (mapping) ->
+          mapping.key is key and not mapping.reverse
         doMapping(id, fields, changedMappings)
       pub.changed(collection._name, id, fields)
     removed: (id) ->
