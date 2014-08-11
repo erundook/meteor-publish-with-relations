@@ -5,8 +5,14 @@ Meteor.publishWithRelations = (params) ->
   publishAssoc = (collection, filter, options) ->
     collection.find(filter, options).observeChanges
       added: (id, fields) =>
+        # transform document
+        if _.isFunction(options.transform)
+            fields = options.transform(fields)
         pub.added(collection._name, id, fields)
       changed: (id, fields) =>
+        # transform document
+        if _.isFunction(options.transform)
+            fields = options.transform(fields)
         pub.changed(collection._name, id, fields)
       removed: (id) =>
         pub.removed(collection._name, id)
@@ -42,6 +48,9 @@ Meteor.publishWithRelations = (params) ->
   options = params.options
   collectionHandle = collection.find(filter, options).observeChanges
     added: (id, fields) ->
+      # transform document
+      if _.isFunction(options.transform)
+        fields = options.transform(fields)
       pub.added(collection._name, id, fields)
       associations[id] ?= {}
       doMapping(id, fields, params.mappings)
@@ -49,6 +58,9 @@ Meteor.publishWithRelations = (params) ->
       _.each fields, (value, key) ->
         changedMappings = _.where(params.mappings, {key: key, reverse: false})
         doMapping(id, fields, changedMappings)
+      # transform document
+      if _.isFunction(options.transform)
+        fields = options.transform(fields)
       pub.changed(collection._name, id, fields)
     removed: (id) ->
       handle.stop() for handle in associations[id]
