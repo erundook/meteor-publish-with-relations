@@ -52,7 +52,7 @@ comments to the ```Comments``` collection and corresponding authors to
 the ```Meteor.users``` collection so we have all the data we need to
 display a post.
 
-You can check another (more complex) example at this [gist](https://gist.github.com/erundook/5012259).
+You can check another (more complex) example at this [gist](https://gist.github.com/svasva/5012259).
 
 ### Changelog
 #### v0.1.4
