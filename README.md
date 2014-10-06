@@ -9,7 +9,7 @@ Publish with relations can be installed with [Meteorite](https://github.com/oort
 From inside a Meteorite-managed app:
 
 ``` sh
-$ mrt add publish-with-relations
+$ meteor add publish-with-relations
 ```
 
 ## API
