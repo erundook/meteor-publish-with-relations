@@ -11,6 +11,10 @@ From inside a Meteorite-managed app:
 ``` sh
 $ mrt add publish-with-relations
 ```
+or from meteor 0.9.0
+``` sh
+$ meteor add mrt:publish-with-relations
+```
 
 ## API
 
